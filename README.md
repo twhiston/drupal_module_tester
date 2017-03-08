@@ -1,6 +1,8 @@
 # Drupal Module Tester
 
-Drupal 8 project for testing modules with docker quickly.
+Drupal 8 project for PHPUnit testing modules with docker quickly.
+
+THIS DOES NOT RUN SIMPLETESTS!!!
 
 # How to use
 

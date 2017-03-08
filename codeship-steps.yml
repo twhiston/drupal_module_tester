@@ -24,15 +24,3 @@
           #Run the whole core set of drupal tests, as well as FE in parallel
         - command: /opt/app-root/src/app/vendor/bin/phpunit
 
-########################################################################################################################
-# CODESHIP JET - Local Interactive Debugging
-#
-# These tests only builds the app container and then blocks in order to allow interactive connections.
-########################################################################################################################
-- type: serial
-  name: jet.debug
-  tag: jet.debug
-  service: app
-  steps:
-    - command: /opt/app-root/src/env/image/ci/debug/debug.sh
-

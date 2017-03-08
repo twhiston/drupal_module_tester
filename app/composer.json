@@ -52,7 +52,7 @@
     },
     "merge-plugin": {
       "include": [
-        "docroot/modules/custom/*/composer.json",
+        "docroot/modules/*/composer.json",
         "docroot/core/composer.json"
       ],
       "recurse": true,

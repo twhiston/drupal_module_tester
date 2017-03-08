@@ -12,11 +12,13 @@ ENV PHP_VERSION=7.0 \
 
 ARG BUILD_ENV=test
 ENV DRUPAL_LANGCODE=en \
-    DRUPAL_DB_HOST=mariadb \
-    DRUPAL_DB_NAME=site \
-    DRUPAL_DB_USER=dbuser \
-    DRUPAL_DB_PASS=dbpass \
-    DRUPAL_SITE_NAME="Drupal Module Tester" \
+    DRUPAL_DB_HOST="mysql" \
+    DRUPAL_DB_NAME="site" \
+    DRUPAL_DB_USER="dbuser" \
+    DRUPAL_DB_PASS="dbpass" \
+    DRUPAL_DB_PORT=3306 \
+    DRUPAL_DB_PREFIX="test" \
+    DRUPAL_SITE_NAME="Drupal_Module_Tester" \
     DRUPAL_SITE_MAIL="null@void.com" \
     DRUPAL_ACCOUNT_NAME=admin \
     DRUPAL_ACCOUNT_MAIL="null@void.com" \
@@ -74,6 +76,7 @@ RUN mkdir /tmp/sessions && \
     mkdir -p /var/log/simpletest/browser_output && \
     mkdir -p /var/lib/nginx && \
     mkdir -p /var/log/nginx && \
+    mkdir -p /opt/app-root/src/app && \
     touch /var/log/nginx/error.log && \
     touch /var/log/nginx/access.log && \
     chown -R 1001:0 /var/log/nginx && \

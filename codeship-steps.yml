@@ -1,0 +1,38 @@
+# Testing steps
+# All tests are run from a bash script as each command is executed in a new container, so data does not persist without setting up volumes.
+# This means that every test script should be prepended by the wait-for-it script, which will pause until the database is ready to be used
+# That ensures that config syncs, functional tests, and so on, are executed correctly, as these things will fail without a working database connection
+#
+# On feature branches only run custom code checks, currently these are for any type of test, so maybe involves a full bootstrap of drupal
+# All tests will run in all custom modules
+# You should add your own branch specific set of steps to just test your module code on the correct branch
+# This will speed up testing and will ensure other peoples test errors do not impact your module testing or PR
+#- type: serial
+#  tag: ^(feature)
+#  steps:
+#   - service: php
+#     command: ../build/ci/scripts/wait-for-it.sh mariadb:3306 -s -t 60 -- ../build/ci/scripts/feature-branch.sh
+
+#Run all tests on master and develop. Tests are parallelized to speed up the testing process
+- type: serial
+  name: full-test-suite
+  tag: ^(master|develop)
+  steps:
+    - service: app
+      type: parallel
+      steps:
+          #Run the whole core set of drupal tests, as well as FE in parallel
+        - command: /opt/app-root/src/app/vendor/bin/phpunit
+
+########################################################################################################################
+# CODESHIP JET - Local Interactive Debugging
+#
+# These tests only builds the app container and then blocks in order to allow interactive connections.
+########################################################################################################################
+- type: serial
+  name: jet.debug
+  tag: jet.debug
+  service: app
+  steps:
+    - command: /opt/app-root/src/env/image/ci/debug/debug.sh
+

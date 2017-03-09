@@ -16,11 +16,20 @@
 #Run all tests on master and develop. Tests are parallelized to speed up the testing process
 - type: serial
   name: full-test-suite
-  tag: ^(master|develop)
+  tag: ^(master|develop|feature)
   steps:
     - service: app
       type: parallel
       steps:
-          #Run the whole core set of drupal tests, as well as FE in parallel
+        - command: /opt/app-root/image-test.sh
+
+- type: serial
+  name: integration
+  tag: ^(integration)
+  steps:
+    - service: app
+      type: parallel
+      steps:
+          #Run the whole core set of drupal tests
         - command: /opt/app-root/src/app/vendor/bin/phpunit
 

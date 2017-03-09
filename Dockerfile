@@ -1,8 +1,7 @@
 FROM openshift/base-centos7
 
-# This image provides an Nginx+PHP environment for running PHP
-# applications.
-
+# This image provides an Nginx+PHP environment for testing Drupal 8 modules
+# in a Docker CI environment such as codeship.com
 MAINTAINER Tom Whiston <tom.whiston@pwc-digital.ch>
 
 EXPOSE 8000
@@ -12,7 +11,8 @@ ENV PHP_VERSION=7.0 \
 
 ARG BUILD_ENV=test
 ENV DRUPAL_LANGCODE=en \
-    DRUPAL_DB_HOST="mysql" \
+    DRUPAL_DB_HOST="mariadb" \
+    DRUPAL_DB_TYPE="mysql" \
     DRUPAL_DB_NAME="site" \
     DRUPAL_DB_USER="dbuser" \
     DRUPAL_DB_PASS="dbpass" \
@@ -29,7 +29,7 @@ LABEL io.k8s.description="PwC's Experience Center - Nginx and PHP 7 (FPM) Drupal
       io.openshift.expose-services="8000:http" \
       io.openshift.tags="builder,nginx,php,php7,php70,php-fpm,xdebug,pwc,drupal,dev,developer,${BUILD_ENV}"
 
-# Install Apache httpd and PHP
+# Install Nginx and PHP
 RUN curl 'https://setup.ius.io/' -o setup-ius.sh && \
     bash setup-ius.sh
 RUN rm setup-ius.sh
@@ -63,7 +63,8 @@ RUN cp /opt/app-root/etc/conf.d/php-fpm/pool.conf /etc/php-fpm.d/www.conf && \
     cp /opt/app-root/etc/conf.d/php-fpm/fpm.conf /etc/php-fpm.conf
 
 # Xdebug Config
-# We also include a special php.ini which turns on assertions, for ci etc..... by default this is off in the centOS base install
+# We also include a special php.ini which turns on assertions, for ci etc.....
+# by default this is off in the centOS base install
 RUN cp /opt/app-root/etc/conf.d/php-fpm/15-xdebug.ini /etc/php.d/15-xdebug.ini && \
     cp /opt/app-root/etc/conf.d/php-fpm/15-xdebug.ini /etc/php-fpm.d/15-xdebug.ini && \
     cp /opt/app-root/etc/conf.d/php-fpm/php-asserts.ini /etc/php.ini
@@ -97,27 +98,23 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php
 # Copy the base app
 COPY ./app /opt/app-root/src/app
 
+# Create the folders for the module to be tested and symlink it to a more pleasant location for use in end users files
 RUN mkdir /opt/app-root/src/app/docroot/modules/under_test && \
     ln -s /opt/app-root/src/app/docroot/modules/under_test /opt/app-root/test
 
 #fix permissions to keep the ci happy
 RUN fix-permissions ./
-
 # Switch back to our non root user
 USER 1001
-
-WORKDIR /opt/app-root/src/app
 
 ###############
 # DRUPAL SETUP
 ###############
+WORKDIR /opt/app-root/src/app
+
+#install drupal and dependencies and generate autoloader
 RUN  /opt/app-root/src/composer.phar install
-
-#do all our work in our drupal docroot
+#do all our runtime work in our drupal docroot
 WORKDIR /opt/app-root/src/app/docroot
-
-#RUN cp /opt/app-root/test.sh /test.sh
-
-# Set the default CMD to print the usage of the language image if prod
-# or otherwise it will assemble and run, or run
+# Start php-fpm and nginx
 CMD /opt/app-root/services.sh

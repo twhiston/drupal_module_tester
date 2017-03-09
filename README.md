@@ -88,12 +88,10 @@ Add this to codeship-steps.yml to hold the local container open using jet
 #
 # These tests only builds the app container and then blocks in order to allow interactive connections.
 ########################################################################################################################
-- type: serial
-  name: jet.debug
+- name: jet.debug
   tag: jet.debug
   service: app
-  steps:
-    - command: /opt/app-root/services.sh
+  command: /opt/app-root/services.sh
  ```
 
 ## TODO

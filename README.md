@@ -98,3 +98,4 @@ Add this to codeship-steps.yml to hold the local container open using jet
 
 * include profile that installs behat modules and drupal coder
 * include options for code sniffing and changing rulesets
+* link builds to drupal core repo updates

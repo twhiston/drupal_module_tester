@@ -92,15 +92,15 @@ RUN mkdir /tmp/sessions && \
     chmod -R ug+rwx /var/log/simpletest && \
     chmod +x /opt/app-root/services.sh
 
-# Install composer
-RUN php -r "readfile('https://getcomposer.org/installer');" | php
-
 # Copy the base app
 COPY ./app /opt/app-root/src/app
 
 # Create the folders for the module to be tested and symlink it to a more pleasant location for use in end users files
 RUN mkdir /opt/app-root/src/app/docroot/modules/under_test && \
     ln -s /opt/app-root/src/app/docroot/modules/under_test /opt/app-root/test
+
+# Install composer
+RUN php -r "readfile('https://getcomposer.org/installer');" | php
 
 #fix permissions to keep the ci happy
 RUN fix-permissions ./

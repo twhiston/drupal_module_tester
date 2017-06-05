@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+
+  #In a local running configuration the db must be called dmtdb as it is expected in the scripts
+  dmtdb:
+    image: mariadb:latest
+    ports:
+      # Map this dynamically on the ci, as parallel builds require it
+      - "3306"
+    networks:
+      - dm_bridge
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=site
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbpass
+
+  dmt_tester:
+    image: pwcsexperiencecenter/drupal-module-tester:refactor
+    #cached: true
+    links:
+      - dmtdb
+    networks:
+      - dm_bridge
+    ports:
+      - "8000"
+    environment:
+      - TEST_MODULE=dmt_tester
+    volumes:
+      - ./:/opt/app-root/test
+      - ../logs:/opt/app-root/testlog
+    #entrypoint: /opt/app-root/scripts/test.sh
+    # Use this line instead to hold the container open for testing
+    entrypoint: /opt/app-root/scripts/debug.sh
+
+networks:
+  dm_bridge:
+    external: true

@@ -6,7 +6,7 @@
  or your current system user. See core/tests/README.md and
  https://www.drupal.org/node/2116263 for details.
 -->
-<phpunit bootstrap="./core/tests/bootstrap.php" colors="true"
+<phpunit bootstrap="/opt/app-root/src/app/docroot/core/tests/bootstrap.php" colors="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutChangesToGlobalState="true"
@@ -26,25 +26,25 @@
         <ini name="memory_limit" value="-1"/>
 
         <env name="SIMPLETEST_BASE_URL" value="http://0.0.0.0:8000"/>
-        <env name="SIMPLETEST_DB" value="mysql://dbuser:dbpass@mariadb/site"/>
+        <env name="SIMPLETEST_DB" value="mysql://dbuser:dbpass@dmtdb/site"/>
 
-        <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/var/logs/simpletest/browser_output"/>
+        <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/opt/app-root/testlog"/>
     </php>
     <testsuites>
         <testsuite name="custom">
-            <directory>./modules/custom/*</directory>
+            <directory>/opt/app-root/src/app/docroot/modules/*</directory>
         </testsuite>
         <testsuite name="unit">
-            <file>./core/tests/TestSuites/UnitTestSuite.php</file>
+            <file>/opt/app-root/src/app/docroot/core/tests/TestSuites/UnitTestSuite.php</file>
         </testsuite>
         <testsuite name="kernel">
-            <file>./core/tests/TestSuites/KernelTestSuite.php</file>
+            <file>/opt/app-root/src/app/docroot/core/tests/TestSuites/KernelTestSuite.php</file>
         </testsuite>
         <testsuite name="functional">
-            <file>./core/tests/TestSuites/FunctionalTestSuite.php</file>
+            <file>/opt/app-root/src/app/docroot/core/tests/TestSuites/FunctionalTestSuite.php</file>
         </testsuite>
         <testsuite name="functional-javascript">
-            <file>./core/tests/TestSuites/FunctionalJavascriptTestSuite.php</file>
+            <file>/opt/app-root/src/app/docroot/core/tests/TestSuites/FunctionalJavascriptTestSuite.php</file>
         </testsuite>
     </testsuites>
     <listeners>
@@ -54,11 +54,11 @@
     <!-- Filter for coverage reports. -->
     <filter>
         <whitelist>
-            <directory>./core/includes</directory>
-            <directory>./core/lib</directory>
-            <directory>./core/modules</directory>
-            <directory>./modules</directory>
-            <directory>./sites</directory>
+            <directory>/opt/app-root/src/app/docroot/core/includes</directory>
+            <directory>/opt/app-root/src/app/docroot/core/lib</directory>
+            <directory>/opt/app-root/src/app/docroot/core/modules</directory>
+            <directory>/opt/app-root/src/app/docroot/modules</directory>
+            <directory>/opt/app-root/src/app/docroot/sites</directory>
             <!-- By definition test classes have no tests. -->
             <exclude>
                 <directory suffix="Test.php">./</directory>

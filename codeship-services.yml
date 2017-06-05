@@ -3,23 +3,26 @@
 # NEVER use this compose file for production builds
 # Caching is done against the develop branch to help speed up CI tests
 
-mariadb:
-  image: mariadb:latest
-  cached: true
-  ports:
-    # Map this dynamically on the ci, as parallel builds require it
-    - "3306"
-  environment:
-     - MYSQL_ROOT_PASSWORD=root
-     - MYSQL_DATABASE=site
-     - MYSQL_USER=dbuser
-     - MYSQL_PASSWORD=dbpass
+version: "2"
 
-app:
-  build:
-    dockerfile_path: ./Dockerfile
-  cached: true
-  links:
-    - mariadb
-  ports:
+services:
+
+  mariadb:
+    image: mariadb:latest
+    #cached: true
+    ports:
+      # Map this dynamically on the ci, as parallel builds require it
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=site
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbpass
+
+  app:
+    build: .
+    #cached: true
+    links:
+      - mariadb
+    ports:
       - "8000"

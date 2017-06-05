@@ -9,9 +9,10 @@ EXPOSE 8000
 ENV PHP_VERSION=7.0 \
     PATH=$PATH:/opt/rh/rh-php70/root/usr/bin
 
+
 ARG BUILD_ENV=test
 ENV DRUPAL_LANGCODE=en \
-    DRUPAL_DB_HOST="mariadb" \
+    DRUPAL_DB_HOST="dmtdb" \
     DRUPAL_DB_TYPE="mysql" \
     DRUPAL_DB_NAME="site" \
     DRUPAL_DB_USER="dbuser" \
@@ -55,7 +56,7 @@ RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus \
 # ENVIRONMENTAL CONFIG
 ############################
 
-# Each image variant can have 'contrib' a directory with extra files needed to
+# Each image variant can have an 'env' directory with extra files needed to
 # run and build the applications.
 COPY ./env/${BUILD_ENV} /opt/app-root
 
@@ -74,7 +75,10 @@ RUN cp /opt/app-root/etc/conf.d/php-fpm/15-xdebug.ini /etc/php.d/15-xdebug.ini &
 # writeable as OpenShift default security model is to run the container under
 # random UID.
 RUN mkdir /tmp/sessions && \
-    mkdir -p /var/log/simpletest/browser_output && \
+    mkdir -p /opt/app-root/testlog && \
+    #mkdir -p /opt/app-root/src/app/docroot/sites/simpletest && \
+    #ln -s /opt/app-root/testlog /opt/app-root/src/app/docroot/sites/simpletest && \
+    #ln -s /opt/app-root/runtime/phpunit.xml /opt/app-root/src/app/docroot/phpunit.xml && \
     mkdir -p /var/lib/nginx && \
     mkdir -p /var/log/nginx && \
     mkdir -p /opt/app-root/src/app && \
@@ -89,7 +93,7 @@ RUN mkdir /tmp/sessions && \
     chmod -R ug+rwx /var/log/nginx && \
     chmod -R ug+rwx /var/lib/nginx && \
     chmod -R ug+rwx /opt/app-root && \
-    chmod -R ug+rwx /var/log/simpletest && \
+    chmod -R ug+rwx /opt/app-root/testlog && \
     chmod +x /opt/app-root/services.sh
 
 # Copy the base app
@@ -112,9 +116,9 @@ USER 1001
 ###############
 WORKDIR /opt/app-root/src/app
 
-#install drupal and dependencies and generate autoloader
+# Install vendors and generate autoloader
 RUN  /opt/app-root/src/composer.phar install
-#do all our runtime work in our drupal docroot
+# Do all our runtime work in our drupal docroot
 WORKDIR /opt/app-root/src/app/docroot
 # Start php-fpm and nginx
 CMD /opt/app-root/services.sh

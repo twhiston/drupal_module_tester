@@ -1,0 +1,6 @@
+NS = pwcsexperiencecenter
+VERSION ?= refactor
+
+REPO = drupal-module-tester
+NAME = drupal-module-tester
+INSTANCE = head

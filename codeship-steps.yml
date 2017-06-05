@@ -1,19 +1,7 @@
-# Testing steps
-# All tests are run from a bash script as each command is executed in a new container, so data does not persist without setting up volumes.
-# This means that every test script should be prepended by the wait-for-it script, which will pause until the database is ready to be used
-# That ensures that config syncs, functional tests, and so on, are executed correctly, as these things will fail without a working database connection
+# Drupal Module Tester
 #
-# On feature branches only run custom code checks, currently these are for any type of test, so maybe involves a full bootstrap of drupal
-# All tests will run in all custom modules
-# You should add your own branch specific set of steps to just test your module code on the correct branch
-# This will speed up testing and will ensure other peoples test errors do not impact your module testing or PR
-#- type: serial
-#  tag: ^(feature)
-#  steps:
-#   - service: php
-#     command: ../build/ci/scripts/wait-for-it.sh mariadb:3306 -s -t 60 -- ../build/ci/scripts/feature-branch.sh
+# Test steps to ensure this image builds correctly
 
-#Run all tests on master and develop. Tests are parallelized to speed up the testing process
 - type: serial
   name: full-test-suite
   tag: ^(master|develop|feature)
@@ -21,8 +9,9 @@
     - service: app
       type: parallel
       steps:
-        - command: /opt/app-root/image-test.sh
+        - command: /opt/app-root/scripts/util/image-test.sh
 
+# On the integration branch you can run a full set of drupal core unit tests
 - type: serial
   name: integration
   tag: ^(integration)
@@ -30,6 +19,5 @@
     - service: app
       type: parallel
       steps:
-          #Run the whole core set of drupal tests
         - command: /opt/app-root/src/app/vendor/bin/phpunit
 

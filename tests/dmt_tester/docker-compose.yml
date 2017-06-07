@@ -30,9 +30,9 @@ services:
     volumes:
       - ./:/opt/app-root/test
       - ../logs:/opt/app-root/testlog
-    #entrypoint: /opt/app-root/scripts/test.sh
+    entrypoint: /opt/app-root/scripts/test.sh
     # Use this line instead to hold the container open for testing
-    entrypoint: /opt/app-root/scripts/debug.sh
+    #entrypoint: /opt/app-root/scripts/debug.sh
 
 networks:
   dm_bridge:

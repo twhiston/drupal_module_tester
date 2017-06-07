@@ -76,9 +76,9 @@ RUN cp /opt/app-root/etc/conf.d/php-fpm/15-xdebug.ini /etc/php.d/15-xdebug.ini &
 # random UID.
 RUN mkdir /tmp/sessions && \
     mkdir -p /opt/app-root/testlog && \
-    #mkdir -p /opt/app-root/src/app/docroot/sites/simpletest && \
-    #ln -s /opt/app-root/testlog /opt/app-root/src/app/docroot/sites/simpletest && \
-    #ln -s /opt/app-root/runtime/phpunit.xml /opt/app-root/src/app/docroot/phpunit.xml && \
+    mkdir -p /opt/app-root/src/app/docroot/sites/simpletest && \
+    ln -s /opt/app-root/testlog /opt/app-root/src/app/docroot/sites/simpletest && \
+    ln -s /opt/app-root/runtime/phpunit.xml /opt/app-root/src/app/docroot/phpunit.xml && \
     mkdir -p /var/lib/nginx && \
     mkdir -p /var/log/nginx && \
     mkdir -p /opt/app-root/src/app && \

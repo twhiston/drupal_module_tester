@@ -23,6 +23,6 @@ services:
     build: .
     #cached: true
     links:
-      - mariadb
+      - dmtdb
     ports:
       - "8000"

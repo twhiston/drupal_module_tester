@@ -9,7 +9,7 @@ services:
 
   dmtdb:
     image: mariadb:latest
-    #cached: true
+    cached: true
     ports:
       # Map this dynamically on the ci, as parallel builds require it
       - "3306"
@@ -21,7 +21,6 @@ services:
 
   app:
     build: .
-    #cached: true
     links:
       - dmtdb
     ports:

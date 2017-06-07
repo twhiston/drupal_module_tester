@@ -2,6 +2,8 @@
 
 source /opt/app-root/scripts/util/hostname.sh
 
-source /opt/app-root/scripts/util/bootstrap.sh
+if [ "$BOOTSTRAP" == "true" ]; then
+    source /opt/app-root/scripts/util/bootstrap.sh
+fi
 
 source /opt/app-root/scripts/util/hold.sh

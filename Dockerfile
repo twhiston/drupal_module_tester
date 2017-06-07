@@ -77,7 +77,7 @@ RUN curl 'https://setup.ius.io/' -o setup-ius.sh && \
     mkdir -p /opt/app-root/testlog && \
     mkdir -p /opt/app-root/src/app/docroot/sites/simpletest && \
     ln -s /opt/app-root/testlog /opt/app-root/src/app/docroot/sites/simpletest && \
-    #ln -s /opt/app-root/runtime/phpunit.xml /opt/app-root/src/app/docroot/phpunit.xml && \
+    ln -s /opt/app-root/runtime/phpunit.xml /opt/app-root/src/app/docroot/phpunit.xml && \
     mkdir -p /var/lib/nginx && \
     mkdir -p /var/log/nginx && \
     mkdir -p /opt/app-root/src/app && \

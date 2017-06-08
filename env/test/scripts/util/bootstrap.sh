@@ -5,6 +5,7 @@ set -e
 pushd /opt/app-root/src/app
     #This will fetch dependencies but not screw up the base installation
     /opt/app-root/src/composer.phar update --lock
+    /opt/app-root/src/app/vendor/bin/drupal init
 popd
 
 #wait for db to be available

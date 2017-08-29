@@ -1,5 +1,5 @@
 NS = pwcsexperiencecenter
-VERSION ?= refactor
+VERSION ?= latest
 
 REPO = drupal-module-tester
 NAME = drupal-module-tester

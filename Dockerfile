@@ -21,7 +21,7 @@ ENV DRUPAL_LANGCODE=en \
     DRUPAL_DB_PREFIX="test" \
     DRUPAL_SITE_NAME="Drupal_Module_Tester" \
     DRUPAL_SITE_MAIL="null@void.com" \
-    DRUPAL_ACCOUNT_NAME=admin \
+    DRUPAL_ACCOUNT_NAME="admin" \
     DRUPAL_ACCOUNT_MAIL="null@void.com" \
     DRUPAL_ACCOUNT_PASS="t0t4lly1n53cur3"
 

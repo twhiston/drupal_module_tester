@@ -5,8 +5,11 @@ set -e
 pushd /opt/app-root/src/app
     #This will fetch dependencies but not screw up the base installation
     /opt/app-root/src/composer.phar update --lock
-    /opt/app-root/src/app/vendor/bin/drupal init
 popd
+
+# Initialize drupal in the docroot and be explict about the destination location to ensure no interactive mode
+# Destination MUST end with a trailing slash or the install will get messed up
+/opt/app-root/src/app/vendor/bin/drupal init --destination /opt/app-root/src/.console/ -n
 
 #wait for db to be available
 /opt/app-root/scripts/util/wait-for-it.sh ${DRUPAL_DB_HOST}:3306 -s -t 240 || exit 1

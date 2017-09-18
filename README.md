@@ -132,7 +132,7 @@ You will need to recreate the mariadb container to get a fresh install, however 
 Running like this will reduce the execution time by ~2m
 
 ### DM NOTE
-If you use DM you may want to add the dm_bridge network to your local docker-compose file for everything to work properly.
+If you use [DM](https://github.com/twhiston/dm) you may want to add the dm_bridge network to your local docker-compose file for everything to work properly.
 
 To your docker-compose.yml add
 ```
@@ -165,6 +165,9 @@ So you can very easily create your own custom builds by forking this repo and ma
 If you want to change the scripts run you could mount a custom scripts folder to `opt/app-root/runtime`
 and add changes to `test.sh`
 `opt/app-root/runtime` must also contain a phpunit.xml file, which will be used to run the tests
+
+`opt/app-root/runtime/test.sh` should not be used as the container command unless you want to completely bypass the bootstrapping process.
+The usual command will be /opt/app-root/scripts/test.sh
 
 ## Environmental Variables
 

@@ -1,5 +1,6 @@
 NS = pwcsexperiencecenter
-VERSION ?= latest
+DRUPAL_CORE_VERSION ?= 8.4
+PHP_VERSION ?= 71
 
 REPO = drupal-module-tester
 NAME = drupal-module-tester

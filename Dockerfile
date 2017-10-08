@@ -6,11 +6,11 @@ MAINTAINER Tom Whiston <tom.whiston@pwc-digital.ch>
 
 EXPOSE 8000
 
-ENV PHP_VERSION=7.0 \
-    PATH=$PATH:/opt/rh/rh-php70/root/usr/bin
-
-
 ARG BUILD_ENV=test
+ARG DRUPAL_CORE_VERSION
+ARG PHP_VERSION=70
+
+ENV PATH=$PATH:/opt/rh/rh-php${PHP_VERSION}/root/usr/bin
 ENV DRUPAL_LANGCODE=en \
     DRUPAL_DB_HOST="dmtdb" \
     DRUPAL_DB_TYPE="mysql" \
@@ -25,10 +25,10 @@ ENV DRUPAL_LANGCODE=en \
     DRUPAL_ACCOUNT_MAIL="null@void.com" \
     DRUPAL_ACCOUNT_PASS="t0t4lly1n53cur3"
 
-LABEL io.k8s.description="PwC's Experience Center - Nginx and PHP 7 (FPM) Drupal 8 Module Tester" \
-      io.k8s.display-name="PwC's Experience Center - Nginx and PHP 7 (FPM) Drupal 8 Module Tester" \
+LABEL io.k8s.description="PwC's Experience Center - Nginx and PHP ${PHP_VERSION} (FPM) Drupal 8 Module Tester" \
+      io.k8s.display-name="PwC's Experience Center - Nginx and PHP ${PHP_VERSION} (FPM) Drupal 8 Module Tester" \
       io.openshift.expose-services="8000:http" \
-      io.openshift.tags="builder,nginx,php,php7,php70,php-fpm,xdebug,pwc,drupal,dev,developer,${BUILD_ENV}"
+      io.openshift.tags="builder,nginx,php,php7,php${PHP_VERSION},php-fpm,xdebug,pwc,drupal,dev,developer,${BUILD_ENV}"
 
 ############################
 # ENVIRONMENTAL CONFIG
@@ -43,20 +43,20 @@ RUN curl 'https://setup.ius.io/' -o setup-ius.sh && \
     bash setup-ius.sh && \
     rm setup-ius.sh && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus \
-    php70u-fpm-nginx \
-    php70u-cli \
-    php70u-gd \
-    php70u-imap \
-    php70u-json \
-    php70u-mbstring \
-    php70u-mcrypt \
-    php70u-opcache \
-    php70u-pdo \
-    php70u-pdo_mysql \
-    php70u-xml \
-    php70u-curl \
-    php70u-xdebug \
-    php70u-intl && \
+    php${PHP_VERSION}u-fpm-nginx \
+    php${PHP_VERSION}u-cli \
+    php${PHP_VERSION}u-gd \
+    php${PHP_VERSION}u-imap \
+    php${PHP_VERSION}u-json \
+    php${PHP_VERSION}u-mbstring \
+    php${PHP_VERSION}u-mcrypt \
+    php${PHP_VERSION}u-opcache \
+    php${PHP_VERSION}u-pdo \
+    php${PHP_VERSION}u-pdo_mysql \
+    php${PHP_VERSION}u-xml \
+    php${PHP_VERSION}u-curl \
+    php${PHP_VERSION}u-xdebug \
+    php${PHP_VERSION}u-intl && \
     yum clean all -y && \
 
     cp /opt/app-root/etc/conf.d/php-fpm/pool.conf /etc/php-fpm.d/www.conf && \
@@ -112,8 +112,10 @@ USER 1001
 # DRUPAL SETUP
 ###############
 WORKDIR /opt/app-root/src/app
+# Apply the selected version
+RUN sed -i -e "s/DRUPAL_CORE_VERSION/${DRUPAL_CORE_VERSION}/g" composer.json \
 # Install vendors and generate autoloader
-RUN  /opt/app-root/src/composer.phar install
+    && /opt/app-root/src/composer.phar install
 # Do all our runtime work in our drupal docroot
 WORKDIR /opt/app-root/src/app/docroot
 # Start php-fpm and nginx

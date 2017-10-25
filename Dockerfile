@@ -12,7 +12,6 @@ ARG PHP_VERSION=70
 
 ENV PATH=$PATH:/opt/rh/rh-php${PHP_VERSION}/root/usr/bin
 ENV DRUPAL_CORE_VERSION=${DRUPAL_CORE_VERSION} \
-    BUILD_TAG=${DRUPAL_CORE_VERSION} \
     DRUPAL_LANGCODE=en \
     DRUPAL_DB_HOST="dmtdb" \
     DRUPAL_DB_TYPE="mysql" \
@@ -29,6 +28,7 @@ ENV DRUPAL_CORE_VERSION=${DRUPAL_CORE_VERSION} \
 
 LABEL io.k8s.description="PwC's Experience Center - Nginx and PHP ${PHP_VERSION} (FPM) Drupal 8 Module Tester" \
       io.k8s.display-name="PwC's Experience Center - Nginx and PHP ${PHP_VERSION} (FPM) Drupal 8 Module Tester" \
+      io.openshift.build.image-tagger="${DRUPAL_CORE_VERSION}"
       io.openshift.expose-services="8000:http" \
       io.openshift.tags="builder,nginx,php,php7,php${PHP_VERSION},php-fpm,xdebug,pwc,drupal,dev,developer,${BUILD_ENV}"
 

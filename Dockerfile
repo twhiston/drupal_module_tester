@@ -7,7 +7,7 @@ MAINTAINER Tom Whiston <tom.whiston@pwc-digital.ch>
 EXPOSE 8000
 
 ARG BUILD_ENV=test
-ARG DRUPAL_CORE_VERSION
+ARG DRUPAL_CORE_VERSION=8.3
 ARG PHP_VERSION=70
 
 ENV PATH=$PATH:/opt/rh/rh-php${PHP_VERSION}/root/usr/bin
